@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Platform - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            margin: 10px 15px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 200, 150, 0.1));
+            border: 1px solid rgba(0, 150, 200, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.25), rgba(0, 200, 150, 0.15));
+            border-color: rgba(0, 150, 200, 0.4);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #0066cc, #00c896);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
+        }
+
+        .user-name {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .nav-menu::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .nav-menu::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border-radius: 8px;
+            position: relative;
+            display: block;
+            text-decoration: none;
+            color: #b0b8d4;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 102, 204, 0.2);
+            color: #fff;
+            padding-left: 28px;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(0, 102, 204, 0.3), transparent);
+            color: #0099ff;
+            border-left: 3px solid #0099ff;
+            padding-left: 25px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f1729 100%);
+        }
+
+        /* Header */
+        .header {
+            height: 80px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e7ff;
+        }
+
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.2), rgba(0, 200, 150, 0.1));
+            border: 1px solid rgba(0, 150, 200, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            font-size: 22px;
+        }
+
+        .notification-icon:hover {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.3), rgba(0, 200, 150, 0.2));
+            transform: scale(1.05);
+            border-color: rgba(0, 150, 200, 0.5);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            background: #ff3b30;
+            border-radius: 50%;
+            border: 2px solid rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 8px rgba(255, 59, 48, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 8px rgba(255, 59, 48, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 16px rgba(255, 59, 48, 0.8);
+            }
+        }
+
+        /* Content Container */
+        .content-container {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        /* CTA Box */
+        .cta-box {
+            width: 100%;
+            max-width: 900px;
+            min-height: 380px;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 200, 150, 0.08));
+            border: 2px solid rgba(0, 150, 200, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 150, 200, 0.1), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta-box:hover {
+            border-color: rgba(0, 150, 200, 0.5);
+            box-shadow: 0 30px 80px rgba(0, 102, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h1 {
+            font-size: 42px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: #fff;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .cta-content p {
+            font-size: 16px;
+            color: #b0b8d4;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0066cc, #0052a3);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 102, 204, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00c896;
+            border: 2px solid rgba(0, 200, 150, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 200, 150, 0.1);
+            border-color: #00c896;
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .header {
+                padding: 0 30px;
+            }
+
+            .content-container {
+                padding: 40px 30px;
+            }
+
+            .cta-content h1 {
+                font-size: 36px;
+            }
+
+            .cta-box {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 15px 0;
+            }
+
+            .user-profile {
+                margin: 10px 15px;
+            }
+
+            .nav-menu {
+                display: flex;
+                padding: 10px 0;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .main-content {
+                height: auto;
+                min-height: calc(100vh - 100px);
+            }
+
+            .header {
+                height: auto;
+                padding: 15px 30px;
+            }
+
+            .content-container {
+                padding: 30px 20px;
+            }
+
+            .cta-content h1 {
+                font-size: 28px;
+            }
+
+            .cta-box {
+                padding: 30px 20px;
+                min-height: auto;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="user-profile">
+            <div class="user-avatar">👤</div>
+            <div class="user-name">User</div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a class="nav-item active" href="pages/my-health.html">My Health</a>
+            <a class="nav-item" href="pages/appointment.html">Appointment Booking</a>
+            <a class="nav-item" href="pages/tests-reports.html">Tests & Reports</a>
+            <a class="nav-item" href="pages/health-packages.html">Health Packages</a>
+            <a class="nav-item" href="pages/vaccination.html">Vaccination</a>
+            <a class="nav-item" href="pages/doctors.html">Our Doctors</a>
+            <a class="nav-item" href="pages/telemedicine.html">Telemedicine</a>
+            <a class="nav-item" href="pages/premium.html">Premium Program</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <h2 class="header-title">Welcome back to your health dashboard</h2>
+            <div class="notification-wrapper">
+                <div class="notification-icon" role="button" aria-label="Notifications" tabindex="0">
+                    🔔
+                    <div class="notification-badge"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-container">
+            <div class="cta-box">
+                <div class="cta-content">
+                    <h1>Ready to take charge of your health?</h1>
+                    <p>Book a telemedicine consultation or explore our latest health offers</p>
+                    <div class="cta-buttons">
+                        <button class="btn btn-primary" onclick="handleBookTelemedicine()">Book Telemedicine</button>
+                        <button class="btn btn-secondary" onclick="handleViewOffers()">View All Offers</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-item');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Notification handler
+        const notificationIcon = document.querySelector('.notification-icon');
+        notificationIcon.addEventListener('click', function() {
+            alert('No new notifications at this time. Check back soon!');
+        });
+
+        notificationIcon.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                this.click();
+            }
+        });
+
+        // CTA Button handlers
+        function handleBookTelemedicine() {
+            alert('Redirecting to telemedicine booking...');
+            // window.location.href = 'pages/telemedicine.html';
+        }
+
+        function handleViewOffers() {
+            alert('Loading all offers...');
+            // window.location.href = 'pages/health-packages.html';
+        }
+    </script>
+</body>
+</html>
